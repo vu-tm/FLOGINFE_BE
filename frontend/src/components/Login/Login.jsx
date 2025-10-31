@@ -12,7 +12,7 @@ export default function Login() {
     if (username === "admin" && password === "123") {
       // Lưu trạng thái đăng nhập (vd: localStorage)
       localStorage.setItem("isLoggedIn", "true");
-      navigate("/dashboard");
+      navigate("/products");
     } else {
       alert("Sai tài khoản hoặc mật khẩu!");
     }

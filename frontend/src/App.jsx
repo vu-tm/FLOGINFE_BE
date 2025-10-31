@@ -1,17 +1,17 @@
-import { BrowserRouter } from 'react-router-dom';
+import { Navigate, Routes, Route } from 'react-router-dom';
 import Login from './components/Login/Login';
 import ProductList from './components/Product/ProductList';
 
 function App() {
   return (
-    <div>
+    <>
+      <Routes >
+        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/login" element={<Login />} />
 
-
-      <BrowserRouter >
-        {/* <Login /> */}
-        <ProductList />
-      </BrowserRouter>
-    </div>
+        <Route path="products" element={<ProductList />} />
+      </Routes>
+    </>
   );
 }
 
