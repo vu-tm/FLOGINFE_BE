@@ -291,7 +291,7 @@ export default function ProductList() {
                 <button
                   onClick={handleCreateProduct}
                   className="btn-primary"
-                  disabled={!newProduct.name || !newProduct.price || !newProduct.quantity}
+                  
                 >
                   Thêm
                 </button>
