@@ -1,16 +1,16 @@
 package com.flogin.dto;
 
-public class ProductDTO {
+public class ProductDto {
     private String name;
-    private Double price;
-    private Integer quantity;
+    private int price;
+    private int quantity;
     private String category;
 
     // Constructors
-    public ProductDTO() {
+    public ProductDto() {
     }
 
-    public ProductDTO(String name, Double price, Integer quantity, String category) {
+    public ProductDto(String name, int price, int quantity, String category) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
@@ -26,19 +26,19 @@ public class ProductDTO {
         this.name = name;
     }
 
-    public Double getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
-    public Integer getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 

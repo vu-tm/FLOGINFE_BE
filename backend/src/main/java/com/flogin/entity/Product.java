@@ -3,8 +3,10 @@ package com.flogin.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "products")
 public class Product {
 
     @Id // Đây là khóa chính
@@ -12,15 +14,15 @@ public class Product {
     private Long id;
 
     private String name;
-    private Double price;
-    private Integer quantity;
+    private int price;
+    private int quantity;
     private String category;
 
     // Constructors
     public Product() {
     }
 
-    public Product(Long id, String name, Double price, Integer quantity, String category) {
+    public Product(Long id, String name, int price, int quantity, String category) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -45,19 +47,19 @@ public class Product {
         this.name = name;
     }
 
-    public Double getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
-    public Integer getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
