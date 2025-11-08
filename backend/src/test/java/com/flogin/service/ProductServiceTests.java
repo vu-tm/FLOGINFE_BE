@@ -7,6 +7,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +17,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import com.flogin.dto.ProductDto;
 import com.flogin.entity.Product;
@@ -117,5 +123,43 @@ public class ProductServiceTests {
 
                 verify(productRepository, times(1)).findById(1L);
                 verify(productRepository, times(1)).delete(product);
+        }
+
+        @Test
+        @DisplayName("TC5: Lấy tất cả sản phẩm với phân trang")
+        void testGetAllProducts() {
+                List<Product> products = Arrays.asList(
+                                new Product(1L, "Laptop", 15000000, 10, "Electronics"),
+                                new Product(2L, "Mouse", 390000, 40, "Electronics"),
+                                new Product(3L, "Headphones", 1290000, 10, "Electronics"));
+
+                Pageable pageable = PageRequest.of(0, 2); // page 0, size 2
+                Page<Product> productPage = new PageImpl<>(
+                                products.subList(0, 2), // Lấy 2 sp đầu
+                                pageable,
+                                products.size() // Tổng số phần tử
+                );
+
+                when(productRepository.findAll(any(Pageable.class)))
+                                .thenReturn(productPage);
+
+                Page<ProductDto> result = productService.getAllProducts(0, 2);
+
+                // Verify kết quả
+                assertNotNull(result);
+                assertEquals(2, result.getContent().size()); // Có 2 sản phẩm trong trang
+                assertEquals(3, result.getTotalElements()); // Tổng 3 sản phẩm
+                assertEquals(2, result.getTotalPages()); // Có 2 trang (3 sản phẩm / 2 per page)
+                assertEquals(0, result.getNumber()); // Đang ở trang 0
+
+                // Verify nội dung sản phẩm đầu tiên
+                ProductDto firstProduct = result.getContent().get(0);
+                assertEquals("Laptop", firstProduct.getName());
+                assertEquals(15000000, firstProduct.getPrice());
+                assertEquals(10, firstProduct.getQuantity());
+                assertEquals("Electronics", firstProduct.getCategory());
+
+                // 6. Verify repository được gọi đúng
+                verify(productRepository, times(1)).findAll(any(Pageable.class));
         }
 }
