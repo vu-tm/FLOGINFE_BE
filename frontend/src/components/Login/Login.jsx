@@ -2,6 +2,7 @@ import { Eye, EyeOff, LogIn } from "lucide-react"; // Thư viện Icon trạng t
 import { useNavigate } from "react-router-dom"; // Thư viện Thẻ link
 import { useState } from "react";
 import "./LoginPage.css";
+import { validatePassword, validateUsername } from "../../utils/loginValidation";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -9,13 +10,14 @@ export default function Login() {
   const navigate = useNavigate(); // Ngăn chặn reload lại trang khi gửi form
   const handleLogin = (e) => {
     e.preventDefault();
-    if (username === "admin" && password === "123") {
-      // Lưu trạng thái đăng nhập (vd: localStorage)
-      localStorage.setItem("isLoggedIn", "true");
-      navigate("/products");
-    } else {
-      alert("Sai tài khoản hoặc mật khẩu!");
+    const usernameError = validateUsername(username);
+    const passwordError = validatePassword(password);
+    if (usernameError || passwordError) {
+      alert(usernameError || passwordError);
+      return;
     }
+    localStorage.setItem("isLoggedIn", "true");
+    navigate("/products");
   };
 
   const [showPassword, setShowPassword] = useState(false);
