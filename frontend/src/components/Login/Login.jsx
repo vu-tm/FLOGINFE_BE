@@ -1,14 +1,16 @@
 import { Eye, EyeOff, LogIn } from "lucide-react"; // Thư viện Icon trạng thái đăng nhập, xuất
-import { useNavigate } from "react-router-dom"; // Thư viện Thẻ link
+// import { useNavigate } from "react-router-dom"; // Thư viện Thẻ link
 import { useState } from "react";
 import "./LoginPage.css";
 import { validatePassword, validateUsername } from "../../utils/loginValidation";
+import { loginUser } from "../../services/authService";
+
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate(); // Ngăn chặn reload lại trang khi gửi form
-  const handleLogin = (e) => {
+  // const navigate = useNavigate(); // Ngăn chặn reload lại trang khi gửi form
+  const handleLogin = async (e) => {
     e.preventDefault();
     const usernameError = validateUsername(username);
     const passwordError = validatePassword(password);
@@ -16,8 +18,14 @@ export default function Login() {
       alert(usernameError || passwordError);
       return;
     }
-    localStorage.setItem("isLoggedIn", "true");
-    navigate("/products");
+    try { // Test thử mockito Bài 4 nhưng mà thiếu API làm không được
+      const result = await loginUser(username, password);
+      localStorage.setItem("isLoggedIn", "true");
+      window.location.href = "/products";
+      alert("Login thanh cong");
+    } catch (err) {
+      alert(err.message); 
+    }
   };
 
   const [showPassword, setShowPassword] = useState(false);
@@ -32,7 +40,8 @@ export default function Login() {
           <form action="" className="login-form" onSubmit={handleLogin}>
             <div className="input-group">
               <input
-                id="usernamme"
+                id="username-input"
+                data-testid="username-input"
                 type="text"
                 placeholder="Username"
                 className="input"
@@ -44,7 +53,8 @@ export default function Login() {
 
             <div className="input-group password-wrapper">
               <input
-                id="password"
+                id="password-input"
+                data-testid="password-input"
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
                 className="input"
@@ -66,7 +76,10 @@ export default function Login() {
               {/*  Chưa viết test error */}
             </div>
 
-            <button type="submit" className="btn-primary">
+            <button type="submit"
+              className="btn-primary"
+              id="login-button"
+              data-testid="login-button">
               <LogIn className="login-icon-submit" />
               Sign in
             </button>
