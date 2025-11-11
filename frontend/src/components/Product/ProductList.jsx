@@ -466,6 +466,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ProductList.css"; // Import CSS
 import ProductForm from "./ProductForm";
+import ProductDetail from "./ProductDetail";
 export default function ProductList() {
   const navigate = useNavigate(); // Dùng để chuyển hướng trang (hook)
   const [products, setProducts] = useState([]); // Danh sách sản phẩm
@@ -515,10 +516,21 @@ export default function ProductList() {
     },
   ];
 
+  // useEffect(() => {
+  //   // Nạp giả lập dữ liệu
+  //   setProducts(demoProducts);
+  //   setFilteredProducts(demoProducts);
+  // }, []);
+
+  //goi API backend để lấy dữ liệu sản phẩm
   useEffect(() => {
-    // Nạp giả lập dữ liệu
-    setProducts(demoProducts);
-    setFilteredProducts(demoProducts);
+    fetch("http://localhost:8080/api/products")
+      .then((res) => res.json())
+      .then((data) => {
+        setProducts(data);
+        setFilteredProducts(data);
+      })
+      .catch((err) => console.error("Lỗi khi tải sản phẩm:", err));
   }, []);
 
   const handleCreateProduct = () => {
@@ -711,69 +723,10 @@ export default function ProductList() {
 
         {/* Modal xem chi tiết – màu sắc & bố cục khác */}
         {showDetailModal && detailProduct && (
-          <div className="modal-overlay">
-            <div className="modal-detail">
-              <div className="modal-header-detail">
-                <h3 className="modal-title-detail">Chi tiết sản phẩm</h3>
-                <button
-                  onClick={() => setShowDetailModal(false)}
-                  className="btn-close-detail"
-                >
-                  <X size={20} />
-                </button>
-              </div>
-
-              <div className="modal-body-detail">
-                {/* Mã + Loại */}
-                <div className="detail-row">
-                  <div className="detail-label">Mã sản phẩm:</div>
-                  <div className="detail-value">
-                    SP-{detailProduct.id.toString().padStart(3, "0")}
-                  </div>
-                </div>
-
-                <div className="detail-row">
-                  <div className="detail-label">Loại:</div>
-                  <div className="detail-value">
-                    <span className={`badge role-${detailProduct.category}`}>
-                      {getCategoryName(detailProduct.category)}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Dòng 2: Tên */}
-                <div className="detail-row">
-                  <div className="detail-label">Tên sản phẩm:</div>
-                  <div className="detail-value large">{detailProduct.name}</div>
-                </div>
-
-                {/* Giá */}
-                <div className="detail-row">
-                  <div className="detail-label">Giá:</div>
-                  <div className="detail-value large">
-                    {formatPrice(detailProduct.price)}
-                  </div>
-                </div>
-
-                {/* Số lương */}
-                <div className="detail-row">
-                  <div className="detail-label">Số lượng:</div>
-                  <div className="detail-value large">
-                    {detailProduct.quantity}
-                  </div>
-                </div>
-              </div>
-
-              <div className="modal-footer-detail">
-                <button
-                  onClick={() => setShowDetailModal(false)}
-                  className="btn-secondary"
-                >
-                  Đóng
-                </button>
-              </div>
-            </div>
-          </div>
+          <ProductDetail
+            product={detailProduct}
+            onClose={() => setShowDetailModal(false)}
+          />
         )}
       </div>
     </>

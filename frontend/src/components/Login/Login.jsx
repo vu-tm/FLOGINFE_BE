@@ -2,9 +2,11 @@ import { Eye, EyeOff, LogIn } from "lucide-react"; // Thư viện Icon trạng t
 // import { useNavigate } from "react-router-dom"; // Thư viện Thẻ link
 import { useState } from "react";
 import "./LoginPage.css";
-import { validatePassword, validateUsername } from "../../utils/loginValidation";
+import {
+  validatePassword,
+  validateUsername,
+} from "../../utils/loginValidation";
 import { loginUser } from "../../services/authService";
-
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -18,13 +20,14 @@ export default function Login() {
       alert(usernameError || passwordError);
       return;
     }
-    try { // Test thử mockito Bài 4 nhưng mà thiếu API làm không được
-      const result = await loginUser(username, password);
+    try {
+      // Test thử mockito Bài 4 nhưng mà thiếu API làm không được
+      //const result = await loginUser(username, password);
       localStorage.setItem("isLoggedIn", "true");
       window.location.href = "/products";
       alert("Login thanh cong");
     } catch (err) {
-      alert(err.message); 
+      alert(err.message);
     }
   };
 
@@ -76,10 +79,12 @@ export default function Login() {
               {/*  Chưa viết test error */}
             </div>
 
-            <button type="submit"
+            <button
+              type="submit"
               className="btn-primary"
               id="login-button"
-              data-testid="login-button">
+              data-testid="login-button"
+            >
               <LogIn className="login-icon-submit" />
               Sign in
             </button>
