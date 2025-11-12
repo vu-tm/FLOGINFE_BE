@@ -54,8 +54,8 @@ public class ProductController {
     }
 
     @PostMapping
-    public Map<String, Object> addProduct(@RequestBody Map<String, Object> newProduct) {
+    public List<Map<String, Object>> addProduct(@RequestBody Map<String, Object> newProduct) {
         products.add(newProduct);
-        return newProduct;
+        return products;
     }
 }
