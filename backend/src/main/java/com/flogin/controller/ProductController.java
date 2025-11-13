@@ -1,6 +1,8 @@
 package com.flogin.controller;
 
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.flogin.dto.ProductDto;
@@ -55,34 +57,46 @@ public class ProductController {
                 return products;
         }
 
+        //
+        // ResponseEntity<T> response = new ResponseEntity<>(body, headers, status);
+        // Status code: 200 = OK, 201 = CREATED, 404 = NOT FOUND
+        // 204 = NO CONTENT(Request successful, no response body)
+        // @RequestBody -> Post / Put
+        //
+
         // CREATE - Tạo sản phẩm mới
         @PostMapping
-        public void createProduct() {
-
+        public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto) {
+                return new ResponseEntity<>(productService.createProduct(productDto), null, HttpStatus.CREATED);
         }
 
         // READ ALL - Lấy tât cả sản phẩm
         @GetMapping
-        public void getAllProducts() {
-
+        public ResponseEntity<Page<ProductDto>> getAllProducts(
+                        @RequestParam(defaultValue = "0") int page,
+                        @RequestParam(defaultValue = "10") int size) {
+                return new ResponseEntity<>(productService.getAllProducts(page, size), null, HttpStatus.OK);
         }
 
         // READ ONE - Lấy sản phẩm theo ID
         @GetMapping("/{id}")
-        public void getProductById() {
-
+        public ResponseEntity<ProductDto> getProductById(@PathVariable Long id) {
+                return new ResponseEntity<>(productService.getProduct(id), null, HttpStatus.OK);
         }
 
         // UPDATE - Cập nhập sản phẩm
         @PutMapping("/{id}")
-        public void updateProduct() {
-
+        public ResponseEntity<ProductDto> updateProduct(
+                        @PathVariable Long id,
+                        @RequestBody ProductDto productDto) {
+                return new ResponseEntity<>(productService.updateProduct(id, productDto), null, HttpStatus.OK);
         }
 
-        // CREATE - Tạo sản phẩm mới
+        // DELTE - Xoá sản phẩm
         @DeleteMapping("/{id}")
-        public void deleteProduct() {
-
+        public ResponseEntity<ProductDto> deleteProduct(@PathVariable Long id) {
+                productService.deleteProduct(id);
+                return new ResponseEntity<>(null, null, HttpStatus.NO_CONTENT);
         }
 
 }
