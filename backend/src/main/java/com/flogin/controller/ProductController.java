@@ -10,7 +10,7 @@ public class ProductController {
 
     // API: Lấy danh sách sản phẩm
     @GetMapping
-    public List<Map<String, Object>> getAllProducts() {
+    public List<Map<String, Object>> initSanPham() {
         List<Map<String, Object>> products = new ArrayList<>();
 
         products.add(Map.of(
