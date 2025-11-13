@@ -467,6 +467,7 @@ import { useNavigate } from "react-router-dom";
 import "./ProductList.css"; // Import CSS
 import ProductForm from "./ProductForm";
 import ProductDetail from "./ProductDetail";
+import { getProducts } from "../../services/productService";
 export default function ProductList() {
   const navigate = useNavigate(); // Dùng để chuyển hướng trang (hook)
   const [products, setProducts] = useState([]); // Danh sách sản phẩm
@@ -484,55 +485,18 @@ export default function ProductList() {
     category: "model",
   });
 
-  // Demo data
-  const demoProducts = [
-    {
-      id: 1,
-      name: "Tai nghe Bluetooth Sony WH-CH520",
-      price: 1290000,
-      quantity: 10,
-      category: "electronics",
-    },
-    {
-      id: 2,
-      name: "Snack khoai tây Lay’s vị BBQ",
-      price: 18000,
-      quantity: 120,
-      category: "food",
-    },
-    {
-      id: 3,
-      name: "Mô hình Gundam RX-78-2 HG 1/144",
-      price: 499000,
-      quantity: 15,
-      category: "model",
-    },
-    {
-      id: 4,
-      name: "Chuột Logitech M331 Silent Plus",
-      price: 390000,
-      quantity: 40,
-      category: "electronics",
-    },
-  ];
-
-  // useEffect(() => {
-  //   // Nạp giả lập dữ liệu
-  //   setProducts(demoProducts);
-  //   setFilteredProducts(demoProducts);
-  // }, []);
-
-  //goi API backend để lấy dữ liệu sản phẩm
   useEffect(() => {
-    fetch("http://localhost:8080/api/products")
-      .then((res) => res.json())
-      .then((data) => {
+    async function fetchData() {
+      try {
+        const data = await getProducts();
         setProducts(data);
         setFilteredProducts(data);
-      })
-      .catch((err) => console.error("Lỗi khi tải sản phẩm:", err));
+      } catch (error) {
+        console.error("Lỗi khi tải sản phẩm:", error);
+      }
+    }
+    fetchData();
   }, []);
-
   const handleCreateProduct = () => {
     // Hàm handle khi tạo sản phẩm
     const product = {
@@ -623,76 +587,82 @@ export default function ProductList() {
               </thead>
 
               {/* Body bảng */}
+              {/* Body bảng */}
               <tbody>
-                {products.map((product) => (
-                  <tr key={product.id} className="table-row-hover">
-                    {/* Mã sản phẩm */}
-                    <td>
-                      <div className="user-name">
-                        SP-{product.id.toString().padStart(3, "0")}
-                      </div>
-                    </td>
+                {products && products.length > 0 ? (
+                  products.map((product) => (
+                    <tr key={product.id} className="table-row-hover">
+                      {/* Mã sản phẩm */}
+                      <td>
+                        <div className="user-name">
+                          SP-{product.id.toString().padStart(3, "0")}
+                        </div>
+                      </td>
 
-                    {/* Tên sản phẩm */}
-                    <td>
-                      <div className="user-name">{product.name}</div>
-                    </td>
+                      {/* Tên sản phẩm */}
+                      <td>
+                        <div className="user-name">{product.name}</div>
+                      </td>
 
-                    {/* Giá */}
-                    <td>
-                      <div className="user-name">
-                        {formatPrice(product.price)}
-                      </div>
-                    </td>
+                      {/* Giá */}
+                      <td>
+                        <div className="user-name">
+                          {formatPrice(product.price)}
+                        </div>
+                      </td>
 
-                    {/* Số lượng */}
-                    <td>
-                      <div className="user-name">{product.quantity}</div>
-                    </td>
+                      {/* Số lượng */}
+                      <td>
+                        <div className="user-name">{product.quantity}</div>
+                      </td>
 
-                    {/* Loại */}
-                    <td>
-                      <span className={`badge role-${product.category}`}>
-                        {getCategoryName(product.category)}
-                      </span>
-                    </td>
+                      {/* Loại */}
+                      <td>
+                        <span className={`badge role-${product.category}`}>
+                          {getCategoryName(product.category)}
+                        </span>
+                      </td>
 
-                    {/* Thao tác */}
-                    <td className="action-cell">
-                      <div className="action-buttons">
-                        {/* Xem chi tiết */}
-                        <button
-                          onClick={() => openDetail(product)}
-                          className="btn-icon"
-                          title="Xem chi tiết"
-                        >
-                          <Eye className="icon-small" />
-                        </button>
+                      {/* Thao tác */}
+                      <td className="action-cell">
+                        <div className="action-buttons">
+                          <button
+                            onClick={() => openDetail(product)}
+                            className="btn-icon"
+                            title="Xem chi tiết"
+                          >
+                            <Eye className="icon-small" />
+                          </button>
 
-                        {/* Sửa */}
-                        <button
-                          onClick={() => {
-                            setEditingProduct(product);
-                            setShowEditModal(true);
-                          }}
-                          className="btn-icon text-blue"
-                          title="Chỉnh sửa"
-                        >
-                          <Edit className="icon-small" />
-                        </button>
+                          <button
+                            onClick={() => {
+                              setEditingProduct(product);
+                              setShowEditModal(true);
+                            }}
+                            className="btn-icon text-blue"
+                            title="Chỉnh sửa"
+                          >
+                            <Edit className="icon-small" />
+                          </button>
 
-                        {/* Xóa */}
-                        <button
-                          onClick={() => handleDeleteProduct(product.id)}
-                          className="btn-icon text-red"
-                          title="Xóa"
-                        >
-                          <Trash2 className="icon-small" />
-                        </button>
-                      </div>
+                          <button
+                            onClick={() => handleDeleteProduct(product.id)}
+                            className="btn-icon text-red"
+                            title="Xóa"
+                          >
+                            <Trash2 className="icon-small" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="6" className="text-center py-3">
+                      Không có sản phẩm nào
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
