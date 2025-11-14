@@ -1,5 +1,8 @@
 package com.flogin.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -71,8 +74,19 @@ public class ProductService {
         productRepository.delete(existingProduct);
     }
 
+    // GET ALL - Lấy tất cả sản phẩm
+    public List<ProductDto> getAllProducts() {
+        // 1. Lấy tất cả sản phẩm từ database
+        List<Product> products = productRepository.findAll();
+
+        // 2. Chuyển từ entity sang DTO
+        return products.stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
     // GET ALL - Lấy tất cả sản phẩm với phân trang
-    public Page<ProductDto> getAllProducts(int page, int size) {
+    public Page<ProductDto> getAllProductsWithPagination(int page, int size) {
         // 1. Tạo thông tin phân trang. page: số trang bắt đầu từ 0
         Pageable pageable = PageRequest.of(page, size);
 

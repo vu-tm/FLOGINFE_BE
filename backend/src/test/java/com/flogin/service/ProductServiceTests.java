@@ -127,7 +127,7 @@ public class ProductServiceTests {
 
         @Test
         @DisplayName("TC5: Lấy tất cả sản phẩm với phân trang")
-        void testGetAllProducts() {
+        void testGetAllProductsWithPagination() {
                 List<Product> products = Arrays.asList(
                                 new Product(1L, "Laptop", 15000000, 10, "Electronics"),
                                 new Product(2L, "Mouse", 390000, 40, "Electronics"),
@@ -143,7 +143,7 @@ public class ProductServiceTests {
                 when(productRepository.findAll(any(Pageable.class)))
                                 .thenReturn(productPage);
 
-                Page<ProductDto> result = productService.getAllProducts(0, 2);
+                Page<ProductDto> result = productService.getAllProductsWithPagination(0, 2);
 
                 // Verify kết quả
                 assertNotNull(result);

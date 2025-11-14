@@ -1,6 +1,6 @@
 package com.flogin.controller;
 
-import org.springframework.data.domain.Page;
+// import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +22,7 @@ public class ProductController {
         }
 
         // API: Lấy danh sách sản phẩm
-        @GetMapping
+        @GetMapping("/init")
         public List<Map<String, Object>> initSanPham() {
                 List<Map<String, Object>> products = new ArrayList<>();
 
@@ -72,10 +72,8 @@ public class ProductController {
 
         // READ ALL - Lấy tât cả sản phẩm
         @GetMapping
-        public ResponseEntity<Page<ProductDto>> getAllProducts(
-                        @RequestParam(defaultValue = "0") int page,
-                        @RequestParam(defaultValue = "10") int size) {
-                return new ResponseEntity<>(productService.getAllProducts(page, size), null, HttpStatus.OK);
+        public ResponseEntity<List<ProductDto>> getAllProducts() {
+                return new ResponseEntity<>(productService.getAllProducts(), null, HttpStatus.OK);
         }
 
         // READ ONE - Lấy sản phẩm theo ID
@@ -99,4 +97,12 @@ public class ProductController {
                 return new ResponseEntity<>(null, null, HttpStatus.NO_CONTENT);
         }
 
+        // // READ ALL - Lấy tât cả sản phẩm với phân trang
+        // @GetMapping("/paged")
+        // public ResponseEntity<List<ProductDto>> getAllProductsWithPagination()
+        // @RequestParam(defaultValue = "0") int page,
+        // @RequestParam(defaultValue = "10") int size) {
+        // return new ResponseEntity<>(productService.getAllProductsWithPagination(page,
+        // size), null, HttpStatus.OK);
+        // }
 }
