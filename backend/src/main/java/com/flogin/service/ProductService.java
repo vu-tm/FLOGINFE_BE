@@ -99,10 +99,12 @@ public class ProductService {
 
     // Helper method chuyển từ Entity sang DTO
     private ProductDto mapToDto(Product product) {
-        return new ProductDto(
-                product.getName(),
-                product.getPrice(),
-                product.getQuantity(),
-                product.getCategory());
+        ProductDto productDto = new ProductDto();
+        productDto.setId(product.getId());
+        productDto.setName(product.getName());
+        productDto.setPrice(product.getPrice());
+        productDto.setQuantity(product.getQuantity());
+        productDto.setCategory(product.getCategory());
+        return productDto;
     }
 }

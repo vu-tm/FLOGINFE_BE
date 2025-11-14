@@ -1,6 +1,7 @@
 package com.flogin.dto;
 
 public class ProductDto {
+    private Long id;
     private String name;
     private int price;
     private int quantity;
@@ -17,7 +18,24 @@ public class ProductDto {
         this.category = category;
     }
 
+    // Constructor với ID
+    public ProductDto(Long id, String name, int price, int quantity, String category) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.category = category;
+    }
+
     // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }

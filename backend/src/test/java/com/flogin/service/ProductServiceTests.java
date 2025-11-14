@@ -2,7 +2,9 @@ package com.flogin.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -75,6 +77,7 @@ public class ProductServiceTests {
                 ProductDto result = productService.getProduct(1L);
 
                 assertNotNull(result);
+                assertEquals(1L, result.getId());
                 assertEquals("Laptop", result.getName());
                 assertEquals(15000000, result.getPrice());
                 assertEquals(10, result.getQuantity());
@@ -161,5 +164,48 @@ public class ProductServiceTests {
 
                 // 6. Verify repository được gọi đúng
                 verify(productRepository, times(1)).findAll(any(Pageable.class));
+        }
+
+        @Test
+        @DisplayName("TC6: Lấy sản phẩm không tồn tại")
+        void testGetProduct_notFound() {
+                when(productRepository.findById(999L)).thenReturn(Optional.empty());
+
+                RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+                        productService.getProduct(999L);
+                });
+
+                assertEquals("Product not found with id: 999", exception.getMessage());
+                verify(productRepository, times(1)).findById(999L);
+        }
+
+        @Test
+        @DisplayName("TC7: Cập nhật sản phẩm không tồn tại")
+        void testUpdateProduct_notFound() {
+                ProductDto productDto = new ProductDto("Laptop Pro", 20000000, 12, "Electronics");
+
+                when(productRepository.findById(999L)).thenReturn(Optional.empty());
+
+                RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+                        productService.updateProduct(999L, productDto);
+                });
+
+                assertEquals("Product not found with id: 999", exception.getMessage());
+                verify(productRepository, times(1)).findById(999L);
+                verify(productRepository, never()).save(any()); // không được gọi save
+        }
+
+        @Test
+        @DisplayName("TC8: Xóa sản phẩm không tồn tại")
+        void testDeleteProduct_notFound() {
+                when(productRepository.findById(999L)).thenReturn(Optional.empty());
+
+                RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+                        productService.deleteProduct(999L);
+                });
+
+                assertEquals("Product not found with id: 999", exception.getMessage());
+                verify(productRepository, times(1)).findById(999L);
+                verify(productRepository, never()).delete(any());
         }
 }

@@ -24,45 +24,45 @@ public class ProductController {
         // // API: Lấy danh sách sản phẩm
         // @GetMapping("/init")
         // public List<Map<String, Object>> initSanPham() {
-        //         List<Map<String, Object>> products = new ArrayList<>();
+        // List<Map<String, Object>> products = new ArrayList<>();
 
-        //         products.add(Map.of(
-        //                         "id", 1,
-        //                         "name", "Tai nghe Bluetooth Sony WH-CH520",
-        //                         "price", 1290000,
-        //                         "quantity", 10,
-        //                         "category", "electronics"));
+        // products.add(Map.of(
+        // "id", 1,
+        // "name", "Tai nghe Bluetooth Sony WH-CH520",
+        // "price", 1290000,
+        // "quantity", 10,
+        // "category", "electronics"));
 
-        //         products.add(Map.of(
-        //                         "id", 2,
-        //                         "name", "Snack khoai tây Lay’s vị BBQ",
-        //                         "price", 18000,
-        //                         "quantity", 120,
-        //                         "category", "food"));
+        // products.add(Map.of(
+        // "id", 2,
+        // "name", "Snack khoai tây Lay’s vị BBQ",
+        // "price", 18000,
+        // "quantity", 120,
+        // "category", "food"));
 
-        //         products.add(Map.of(
-        //                         "id", 3,
-        //                         "name", "Mô hình Gundam RX-78-2 HG 1/144",
-        //                         "price", 499000,
-        //                         "quantity", 15,
-        //                         "category", "model"));
+        // products.add(Map.of(
+        // "id", 3,
+        // "name", "Mô hình Gundam RX-78-2 HG 1/144",
+        // "price", 499000,
+        // "quantity", 15,
+        // "category", "model"));
 
-        //         products.add(Map.of(
-        //                         "id", 4,
-        //                         "name", "Chuột Logitech M331 Silent Plus",
-        //                         "price", 390000,
-        //                         "quantity", 40,
-        //                         "category", "electronics"));
+        // products.add(Map.of(
+        // "id", 4,
+        // "name", "Chuột Logitech M331 Silent Plus",
+        // "price", 390000,
+        // "quantity", 40,
+        // "category", "electronics"));
 
-        //         return products;
+        // return products;
         // }
 
-        //
+        // ========================================================================
         // ResponseEntity<T> response = new ResponseEntity<>(body, headers, status);
         // Status code: 200 = OK, 201 = CREATED, 404 = NOT FOUND
         // 204 = NO CONTENT(Request successful, no response body)
         // @RequestBody -> Post / Put
-        //
+        // ========================================================================
 
         // CREATE - Tạo sản phẩm mới
         @PostMapping
