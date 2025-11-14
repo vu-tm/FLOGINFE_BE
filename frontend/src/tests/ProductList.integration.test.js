@@ -1,45 +1,43 @@
-import { render, screen, waitFor } from "@testing-library/react";
-import { BrowserRouter } from "react-router-dom";
+import { render, screen } from "@testing-library/react";
 import ProductList from "../components/Product/ProductList";
-import * as productService from "../services/productService";
+import { getProducts } from "../services/productService";
+import { MemoryRouter } from "react-router-dom";
 
-// Mock toàn bộ module
-jest.mock("../services/productService");
+jest.mock("../services/productService", () => ({
+  getProducts: jest.fn(),
+}));
 
-const mockProducts = [
-  {
-    id: 1,
-    name: "Tai nghe Bluetooth Sony WH-CH520",
-    price: 1290000,
-    quantity: 10,
-    category: "electronics",
-  },
-];
+test("Hiển thị danh sách sản phẩm từ API mock", async () => {
+  getProducts.mockResolvedValue([
+    {
+      id: 1,
+      name: "Tai nghe Bluetooth Sony WH-CH520",
+      price: 1290000,
+      quantity: 10,
+      category: "electronics",
+    },
+    {
+      id: 2,
+      name: "Snack khoai tây Lay’s vị BBQ",
+      price: 18000,
+      quantity: 120,
+      category: "food",
+    },
+  ]);
 
-describe("ProductList Integration Tests", () => {
-  beforeEach(() => {
-    // Reset mock trước mỗi test
-    jest.clearAllMocks();
-  });
+  render(
+    <MemoryRouter>
+      <ProductList />
+    </MemoryRouter>
+  );
 
-  test("Hiển thị danh sách sản phẩm từ API", async () => {
-    // Mock getProducts trả về mockProducts
-    productService.getProducts.mockResolvedValue(mockProducts);
+  expect(
+    await screen.findByText("Tai nghe Bluetooth Sony WH-CH520")
+  ).toBeInTheDocument();
 
-    render(
-      <BrowserRouter>
-        <ProductList />
-      </BrowserRouter>
-    );
+  expect(
+    await screen.findByText("Snack khoai tây Lay’s vị BBQ")
+  ).toBeInTheDocument();
 
-    // Đợi text xuất hiện
-    await waitFor(() => {
-      expect(
-        screen.getByText("Tai nghe Bluetooth Sony WH-CH520")
-      ).toBeInTheDocument();
-    });
-
-    // Kiểm tra hàm getProducts đã được gọi
-    expect(productService.getProducts).toHaveBeenCalledTimes(1);
-  });
+  expect(getProducts).toHaveBeenCalledTimes(1);
 });

@@ -484,7 +484,44 @@ export default function ProductList() {
     quantity: "",
     category: "model",
   });
+  // Demo data, khi test cho nhung cai khong lien quan toi api
+  const demoProducts = [
+    {
+      id: 1,
+      name: "Tai nghe Bluetooth Sony WH-CH520",
+      price: 1290000,
+      quantity: 10,
+      category: "electronics",
+    },
+    {
+      id: 2,
+      name: "Snack khoai tây Lay’s vị BBQ",
+      price: 18000,
+      quantity: 120,
+      category: "food",
+    },
+    {
+      id: 3,
+      name: "Mô hình Gundam RX-78-2 HG 1/144",
+      price: 499000,
+      quantity: 15,
+      category: "model",
+    },
+    {
+      id: 4,
+      name: "Chuột Logitech M331 Silent Plus",
+      price: 390000,
+      quantity: 40,
+      category: "electronics",
+    },
+  ];
 
+  useEffect(() => {
+    // Nạp giả lập dữ liệu
+    setProducts(demoProducts);
+    setFilteredProducts(demoProducts);
+  }, []);
+  //khi test cho api
   useEffect(() => {
     async function fetchData() {
       try {
