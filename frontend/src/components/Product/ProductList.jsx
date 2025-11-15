@@ -467,7 +467,7 @@ import { useNavigate } from "react-router-dom";
 import "./ProductList.css"; // Import CSS
 import ProductForm from "./ProductForm";
 import ProductDetail from "./ProductDetail";
-import { getProducts } from "../../services/productService";
+import * as productService from "../../services/productService";
 export default function ProductList() {
   const navigate = useNavigate(); // Dùng để chuyển hướng trang (hook)
   const [products, setProducts] = useState([]); // Danh sách sản phẩm
@@ -525,7 +525,7 @@ export default function ProductList() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const data = await getProducts();
+        const data = await productService.getProducts();
         setProducts(data);
         setFilteredProducts(data);
       } catch (error) {
@@ -564,10 +564,14 @@ export default function ProductList() {
     setEditingProduct(null);
   };
 
-  const handleDeleteProduct = (id) => {
-    // Hàm handle khi xóa sản phẩm
+  const handleDeleteProduct = async (id) => {
     if (window.confirm("Bạn có chắc chắn muốn xóa sản phẩm này?")) {
-      setProducts(products.filter((p) => p.id !== id));
+      try {
+        await productService.deleteProduct(id); // gọi API
+        setProducts(products.filter((p) => p.id !== id));
+      } catch (error) {
+        console.error("Xóa sản phẩm thất bại:", error);
+      }
     }
   };
 
